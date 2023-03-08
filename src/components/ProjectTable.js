@@ -5,37 +5,55 @@ import Card from './Card';
 
 const StyledTable = styled.div`
     flex: 1;
-    padding: 5% 10%;
+    padding: 15px;
     &:hover {
         cursor: default;
     }
 `;
 
 const StyledTableTitle = styled.div`
-    font-size: large;
+    font-size: medium;
     font-family: 'p22-mackinac-pro';
     font-weight: 800;
     font-style: italic;
-    text-align: right;
-    margin-bottom: 10%;
-    margin-bottom: 2%;
+    text-align: left;
+    margin-bottom: 5px;
+    &::selection {
+        background-color: black;
+        color: white;
+    }
 `;
 
 const StyledTableSection = styled.div`
     margin-bottom: 10%;
 `;
 
-const StyledTableProject = styled.div`
+const StyledTableProjectDiv = styled.div`
     font-family: "neue-haas-grotesk-display", sans-serif;
     font-weight: 600;
     font-style: normal;
     font-size: small;
-    text-align: right;
+    display: flex;
+    justify-content: flex-start;
+    &:hover {
+        color: white;
+    }
 `;
 
-export default function ProjectTable() {
+const StyledTableProject = styled.div`
+    width: fit-content;
+    &::selection {
+        background-color: black;
+        color: white;
+    }
+`;
 
-    const [highestValue, setHighestValue] = useState(0);
+export default function ProjectTable({
+    setHighestValue,
+    highestValue
+}) {
+
+    // const [highestValue, setHighestValue] = useState(0);
     const [projects, setProjects] = useState(ProjectData);
 
     function handleProjectClick(category, project) {
@@ -62,7 +80,9 @@ export default function ProjectTable() {
                         {Object.keys(projects[category]).map((project) => {
                             return (
                                 <div key={project}>
-                                    <StyledTableProject onClick={() => handleProjectClick(category, project)}> {projects[category][project].preview_title}</StyledTableProject>
+                                    <StyledTableProjectDiv>
+                                        <StyledTableProject onClick={() => handleProjectClick(category, project)}> {projects[category][project].preview_title}</StyledTableProject>
+                                    </StyledTableProjectDiv>
                                     <Card 
                                         key={projects[category][project].key} 
                                         props={projects[category][project]}

@@ -1,95 +1,147 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import ProjectTable from '../components/ProjectTable';
+import About from './About.js'
 import styled from 'styled-components';
+import { Link } from 'react-router-dom';
+import Background from '../assets/pages/home_background.png';
 
-const StyledPage = styled.div`
+const Page = styled.div`
+    height: 100vh;
+    width: 100vw;
     display: flex;
-    flex-direction: row;
-    height: 100%;
+    align-items: center;
+    justify-content: center;
+    color: #444444;
+    background-image: url("${Background}");
+    background-position: center;
+    background-repeat: no-repeat;
+    background-size: cover;
+    -webkit-background-size: cover;
+    -moz-background-size: cover;
+     -o-background-size: cover;
+    overflow: hidden;
 `;
 
-const StyledName = styled.div`
-    font-size: large;
+const Content = styled.div`
+    display: flex;
+    flex-direction: column;
+`;
+
+const Title = styled.div`
+    font-size: x-large;
     font-family: 'p22-mackinac-pro';
     font-weight: 800;
     font-style: italic;
-    margin-bottom: 10%;
+    text-align: center;
+    align-self: center;
+    max-width: 400px;
+    &:hover {
+        color: white;
+        cursor: default;
+    }
+    &::selection {
+        background-color: black;
+        color: white;
+    }
 `;
 
-const StyledDescription = styled.div`
+const Star = styled.span`
+    font-style: normal;
+    &::selection {
+        background-color: black;
+        color: white;
+    }
+`;
+
+const Information = styled.div`
+    width: 100%;
+    max-width: 500px;
+    display: flex;
+    flex-direction: row;
+`;
+
+const Description = styled.div`
+    flex: 1;
+    max-width: 200px;
+    text-align: right;
+    padding: 15px;
     font-size: small;
     font-family: "neue-haas-grotesk-display", sans-serif;
     font-weight: 600;
     font-style: normal;
 `;
 
-const StyledNav = styled.div`
-    margin-top: auto;
-    font-family: 'p22-mackinac-pro';
-    font-weight: 800;
-    font-size: large;
-`;
-
-const StyledLink = styled.a`
-    color: #FFFAE4;
-    text-decoration: underline;
-    &:hover {
-        cursor: pointer;
-        text-decoration: none;
+const DescriptionItem = styled.div`
+    cursor: default;
+    margin-bottom: 5px;
+    &::selection {
+        background-color: black;
+        color: white;
     }
 `;
 
-const StyledAbout = styled.div`
-    justify-self: flex-start;
-    min-width: 250px;
-    max-width: 250px;
-    display: flex;
-    flex-direction: column;
-    flex: 2;
-    padding-top: 10px;
-    padding-left: 20px;
-    padding-bottom: 20px;
+const ExternalLink = styled.a`
+    text-decoration: none;
+    color: #444444;
+    &:hover {
+        color: white;
+        cursor: default;
+        text-decoration: none;
+    }
+    &::selection {
+        background-color: black;
+        color: white;
+    }
 `;
 
-const StyledTable = styled.div`
-    flex: 2;
-    display: flex;
-    flex-direction: column;
-    min-width: 300px;
-    max-width: 300px;
+const InternalLink = styled(Link)`
+  text-decoration: none;
+  color: #444444;
+  &:hover {
+        color: white;
+        cursor: default;
+        text-decoration: none;
+    }
+    &::selection {
+        background-color: black;
+        color: white;
+    }
 `;
 
-const StyledSeparator = styled.div`
-    flex: 2;
-`;
 
 export default function Home() {
+
+    const [aboutPageIsOpen, setAboutPageIsOpen] = useState(false);
+    const [highestValue, setHighestValue] = useState(0);
+
+    useEffect(() => {
+        document.body.style.backgroundImage = `url(${Background})`;
+        return () => {
+            document.body.style.backgroundImage = '';
+        }
+     },[]);
+
     return (
-        <StyledPage>  
-            <StyledAbout>
-                <StyledName>
-                    Jen Luo is a product designer based in Los Angeles.
-                </StyledName>
-                <StyledDescription>
-                    Recently, she has... <br/>
-                    * Advised student research projects as a teaching assistant for <StyledLink target="_blank" href="https://hcicourses.stanford.edu/cs347/2023/">Stanford's capstone class in human-computer interaction research.</StyledLink> <br/>
-                    * Graduated with a B.S. in computer science and M.S. in interaction design from Stanford University. <br/>
-                    * Received a <StyledLink target="_blank" href="https://brown.stanford.edu/portfolio/down-ballots/">year-long grant in data journalism from the Brown Institute.</StyledLink> <br/>
-                    * Worked on design and engineering problems at <StyledLink target="_blank" href="https://shopcanal.com/">Canal.</StyledLink> <br/>
-                    * Exhibited at the Stanford Art Gallery. <br/> 
-                    * <StyledLink>Taken photos commercially and personally.</StyledLink> <br/>
-                    * <StyledLink target="_blank" href="https://www.goodreads.com/user/show/66194132-jen">Read many books.</StyledLink>  
-                </StyledDescription>
-                <StyledNav>
-                    ABOUT<br/>
-                    RESUME <br/>
-                    EMAIL <br/>
-                </StyledNav> 
-            </StyledAbout>
-            <StyledSeparator/>
-            <StyledTable>
-                <ProjectTable/>  
-            </StyledTable>
-        </StyledPage>
+        <Page>  
+            <Content>
+                {aboutPageIsOpen && <About highestValue={highestValue} setHighestValue={setHighestValue} setAboutPageIsOpen={setAboutPageIsOpen}/>}
+                <Title onClick={() => setAboutPageIsOpen(true)}>
+                    Jen Luo is a product designer based in Los Angeles. <Star>✦</Star> 
+                </Title>
+                <Information>
+                    <Description>
+                        <DescriptionItem> Recently, she... </DescriptionItem>
+                        <DescriptionItem> ＊ Taught <ExternalLink target="_blank" href="https://hcicourses.stanford.edu/cs347/2023/"> Stanford's capstone course in human-computer interaction research. </ExternalLink> </DescriptionItem>
+                        <DescriptionItem> ＊ Received a <ExternalLink target="_blank" href="https://brown.stanford.edu/portfolio/down-ballots/"> year-long grant in data journalism from the Brown Institute. </ExternalLink> </DescriptionItem>
+                        <DescriptionItem> ＊ Worked on <ExternalLink target="_blank" href="https://shopcanal.com/"> design and engineering problems at  Canal. </ExternalLink> </DescriptionItem>
+                        <DescriptionItem> ＊ Exhibited at the Stanford Art Gallery. </DescriptionItem>
+                        <DescriptionItem> ＊ Graduated with a B.S. in computer science from Stanford University. </DescriptionItem>
+                        <DescriptionItem> ＊ Pursuing a M.S. in interaction design from Stanford University. </DescriptionItem>
+                        <DescriptionItem> ＊ <InternalLink to="photos" target="_blank"> Took some photos. </InternalLink> </DescriptionItem>
+                    </Description>
+                    <ProjectTable highestValue={highestValue} setHighestValue={setHighestValue}/>  
+                </Information>
+            </Content>
+        </Page>
     );
 }

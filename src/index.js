@@ -1,22 +1,11 @@
 import React from 'react';
-import ReactDOM from 'react-dom/client';
-import Home from './pages/Home';
-import styled from 'styled-components';
+import ReactDOM from 'react-dom';
+import App from './App';
+import { BrowserRouter } from "react-router-dom";
 
-
-const StyledPage = styled.div`
-    height: 100vh;
-    width: 100vw;
-`;
-
-
-const App = () => {
-    return (
-        <StyledPage>
-            <Home/>
-        </StyledPage>
-    );
-}
-
-const root = ReactDOM.createRoot(document.getElementById("root"));
-root.render(<App/>);
+ReactDOM.render(
+    <BrowserRouter>
+        <App/>
+    </BrowserRouter>,
+    document.getElementById('root')
+);

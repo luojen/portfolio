@@ -3,52 +3,59 @@ import Draggable from 'react-draggable';
 import styled from 'styled-components';
 import CloseEllipse from "../assets/icons/ellipse-close.svg";
 import ExpandEllipse from "../assets/icons/ellipse-expand.svg";
-import cx from "classnames";
-import NonPassiveTouchTarget from "./NonPassiveTouchTarget";
-import TouchCarousel, { clamp } from "react-touch-carousel";
-import touchWithMouseHOC from "react-touch-carousel/lib/touchWithMouseHOC";
-import "./Carousel.css";
+import CloseEllipseFilled from "../assets/icons/ellipse-close-filled.svg";
+import ExpandEllipseFilled from "../assets/icons/ellipse-expand-filled.svg";
 
 const StyledCard = styled.div`
   border-style: solid;
-  border-width: 2px;
+  border-width: 1px;
+  border-radius: 10px;
   box-shadow: 2px 2px 2px rgba(0, 0, 0, .5);
-  width: 400px;
-  height: 350px;
+  width: 450px;
+  height: fit-content;
+  max-height: 375px;
 `;
 
-const StyledHeader = styled.div`
-  border-style: solid;
-  border-top: 0ch;
-  border-left: 0ch;
-  border-right: 0ch;
+const Header = styled.div`
+  border-top-left-radius: 8px;
+  border-top-right-radius: 8px;
+  border-bottom: solid;
+  border-width: 0.5px;
   border-color: black;
-  border-width: 3px;
   max-height: 15px;
   display: flex;
-  background-color: rgba(0, 0, 0, .85);
-  font-family: "p22-mackinac-pro", serif;
-  font-weight: 700;
+  background-color: #323232;
+  font-family: "neue-haas-grotesk-text", sans-serif;
+  font-weight: 600;
   font-style: normal;
   color: white;
   padding: 3px;
+  padding-top: 4px;
+  padding-bottom: 4px;
 `;
 
-const StyledHeaderContent = styled.div`
+const StyledHeaderContent = styled.span`
   color: #D1D1D1;
-  font-size: small;
-  margin-left: 10px;
-  flex: 2;
-  align-self: center;
+  font-size: x-small;
+  flex: 1;
+  text-align: center;
 `;
 
-const StyledIcon = styled.img`
-  margin-left: 6px;
-  margin-right: 6px;
+const Icons = styled.div`
+  width: fit-content;
+  display: flex;
+  flex-direction: row;
+  padding-left: 5px;
+`;
+
+const Icon = styled.img`
+  flex: 1;
+  margin-right: 10px;
+  position: relative;
   max-height: 10px;
 `;
 
-const StyledIconContainer = styled.div`
+const HeaderElement = styled.span`
   flex: 1;
   display: flex;
   padding-left: 2px;
@@ -57,38 +64,44 @@ const StyledIconContainer = styled.div`
 
 const StyledBody = styled.div`
   font-family: 'InterBold';
-  height: 75%;
-  padding: 25px;
-  margin-left: 5px;
-  display: flex;
+  max-height: 600px;
+  padding: 15px;
+  padding-top: 10px;
+  display: table;
+  flex-direction: row;
 `;
 
 const StyledPreviewImageContainer = styled.div`
-  flex: 3;
-`;
-
-const StyledPreviewImage = styled.img`
+  display: table-cell;
+  display: flex;
+  max-height: 300px;
   width: 200px;
-  height: 200px;
-  object-fit: cover;
+  flex-direction: column;
+  margin-top: 10px;
+  overflow-y: auto;
+  -ms-overflow-style: none;
+  scrollbar-width: none;
+  &::-webkit-scrollbar {
+     display: none;
+  }
+  &:hover {
+      cursor: s-resize;
+  }
 `;
 
 const StyledBodyContent = styled.div`
-  flex: 2;
+  display: table-cell;
+  vertical-align: top;
+  padding-top: 10px;
   padding-left: 20px;
-  padding-top: 5px;
+  width: auto;
+  max-height: 300px;
 `;
 
-const StyledBodyTitle = styled.div`
-  color: rgba(0, 0, 0, .8);
-  width: fit-content;
-  max-width: 160px;
-  white-space: pre-line;
-  overflow-wrap: break-word;
-  font-size: large;
-  font-family: 'p22-mackinac-pro';
-  font-style: italic;
-  font-weight: 800;
+const StyledPreviewImage = styled.img`
+  max-width: 100%;
+  max-height: 100%;
+  object-fit: cover;
 `;
 
 const StyledBodyDescription = styled.div`
@@ -97,12 +110,53 @@ const StyledBodyDescription = styled.div`
   font-weight: 400;
   font-style: normal;
   padding-top: 10px;
+  padding-bottom: 10px;
+  white-space: pre-line;
 `;
 
-const cardSize = 200;
-const cardPadCount = 2;
-const carouselWidth = clamp(window.innerWidth, 0, 200);
+const StyledBodyTitleContainer = styled.div`
+  margin-bottom: 9px;
+  color: #444444;
+  width: fit-content;
+  white-space: pre-line;
+  overflow-wrap: break-word;
+  font-size: large;
+  font-family: 'p22-mackinac-pro';
+  font-style: italic;
+  font-weight: 800;
+`;
 
+
+const StyledBodyTitleLink = styled.a`
+  color: #444444;
+  text-decoration: none;
+  &:hover {
+      color: #FFFAE4;
+      cursor: pointer;
+  }
+`;
+
+const StyledBodyTags = styled.div`
+  font-size: x-small;
+  font-family: 'ibm-plex-mono', sans-serif;
+  font-weight: 800;
+  font-style: normal;
+  display: flex;
+  flex-direction: row;
+`;
+
+const StyledBodyPosition = styled.div`
+  border-style: solid;
+  padding-left: 3px;
+  padding-right: 3px;
+`;
+
+const StyledBodyYear = styled.div`
+  border-style: solid;
+  padding-left: 3px;
+  padding-right: 3px;
+  margin-right: 8px;
+`;
 
 export default function Card({ 
   props, 
@@ -114,11 +168,13 @@ export default function Card({
 
   const [z, setZ] = useState(0);
   const [top, setTop] = useState(Math.floor(Math.random()*(window.innerHeight-350)));
-  const [left, setLeft] = useState(Math.floor(Math.random()*((window.innerWidth-400)-350) + 350));
-  const [images, setImages] = useState([]);
+  const [left, setLeft] = useState(Math.floor(Math.random()*((window.innerWidth-400)-400)));
   const [dragDisabled, setDragDisabled] = useState(false);
+  const [showIconsFilled, setShowIconsFilled] = useState(false);
   const Chip = useRef();
   const CarouselRef = useRef();
+  const LinkRef = useRef();
+  const IconRef = useRef();
 
   useEffect(() => {
     function handleMouseDown(event) {
@@ -128,7 +184,12 @@ export default function Card({
       }
     }
     function handleMouseOver(event) {
-      if (CarouselRef.current && CarouselRef.current.contains(event.target)) {
+      if (IconRef.current && IconRef.current.contains(event.target)) {
+        setShowIconsFilled(true);
+      } else {
+        setShowIconsFilled(false);
+      }
+      if ((CarouselRef.current && CarouselRef.current.contains(event.target)) || (LinkRef.current && LinkRef.current.contains(event.target))) {
         setDragDisabled(true);
       } else {
         setDragDisabled(false);
@@ -143,67 +204,9 @@ export default function Card({
 
   useEffect(() => {
     setZ(props.order);
-    setImages(props.preview_images);
-  }, [props.order, props.preview_images])
+  }, [props.order, props.preview_images]);
 
-  function renderCard(index, modIndex) {
-    const item = images[modIndex];
-    if (item) {
-      return (
-        <div
-          key={index}
-          className="carousel-card"
-          onClick={() => console.log(`clicked card ${1 + modIndex}`)}
-        >
-          <div
-            className="carousel-card-inner"
-          >
-            <StyledPreviewImage draggable={false} src={item}></StyledPreviewImage>
-          </div>
-          
-        </div>
-      );
-    }
-  }
-
-  function CarouselContainer(props) {
-    const {
-      cursor,
-      carouselState: { active, dragging },
-      ...rest
-    } = props;
-    let current = -Math.round(cursor) % (images ? images.length : 0);
-    while (current < 0) {
-      current += images.length;
-    }
-    // Put current card at center
-    const translateX =
-      (cursor - cardPadCount) * cardSize + (carouselWidth - cardSize) / 2;
-    return (
-      <NonPassiveTouchTarget
-        className={        
-          cx("carousel-container", {
-          "is-active": active,
-          "is-dragging": dragging
-        })}
-      >
-        <NonPassiveTouchTarget
-          className="carousel-track"
-          style={{ transform: `translate3d(${translateX}px, 0, 0)` }}
-          {...rest}
-        />
-        <div className="carousel-pagination-wrapper">
-          <ol className="carousel-pagination">
-            {images && images.map((_, index) => (
-              <li key={index} className={current === index ? "current" : ""} />
-            ))}
-          </ol>
-        </div>
-      </NonPassiveTouchTarget>
-    );
-  }
   
-  const Container = touchWithMouseHOC(CarouselContainer);
 
   if (props.order > 0)
     return (
@@ -214,38 +217,51 @@ export default function Card({
               zIndex: z,
               top: top,
               left: left,
-              background: props.color,
+              backgroundImage: `url(${props.background})`,
             }}
             ref={Chip}
           >
-              <StyledHeader>
-                <StyledIconContainer>
-                  <StyledIcon src={CloseEllipse} alt="Close Window" onClick={() => {
-                      const updatedProject = {...projects[props.category][props.key], order: 0};
-                      const updatedCategory = {...projects[props.category], [props.key]: updatedProject};
-                      const updatedProjects = {...projects, [props.category]: updatedCategory};
-                      setProjects(updatedProjects);
-                  }}/>
-                  <StyledIcon src={ExpandEllipse} alt="Expand Window"/>
-                </StyledIconContainer>  
-                <StyledHeaderContent> {props.category} </StyledHeaderContent>  
-              </StyledHeader>
+              <Header>
+                <HeaderElement>
+                  <Icons ref={IconRef}>
+                    {!showIconsFilled && <Icon 
+                      src={CloseEllipse} 
+                      onClick={() => {
+                          const updatedProject = {...projects[props.category][props.key], order: 0};
+                          const updatedCategory = {...projects[props.category], [props.key]: updatedProject};
+                          const updatedProjects = {...projects, [props.category]: updatedCategory};
+                          setProjects(updatedProjects);
+                      }}
+                    />}
+                    {(!showIconsFilled && props.expandable) && <Icon src={ExpandEllipse}/>}
+                    {showIconsFilled && <Icon 
+                      src={CloseEllipseFilled} 
+                      onClick={() => {
+                          const updatedProject = {...projects[props.category][props.key], order: 0};
+                          const updatedCategory = {...projects[props.category], [props.key]: updatedProject};
+                          const updatedProjects = {...projects, [props.category]: updatedCategory};
+                          setProjects(updatedProjects);
+                      }}
+                    />}
+                    {(showIconsFilled && props.expandable) && <Icon src={ExpandEllipseFilled}/>}
+                  </Icons>
+                </HeaderElement> 
+                <HeaderElement><StyledHeaderContent> {props.header} </StyledHeaderContent></HeaderElement>
+                <HeaderElement/>  
+              </Header>
               <StyledBody>
                 <StyledPreviewImageContainer ref={CarouselRef}>
-                    <TouchCarousel
-                      component={Container}
-                      cardSize={cardSize}
-                      cardCount={images.length}
-                      cardPadCount={cardPadCount}
-                      loop={true}
-                      renderCard={renderCard}
-                    />
+                    {props.preview_images.map((i) => (
+                      <span key={i}><StyledPreviewImage src={i} draggable={false}/></span>
+                    ))}
                 </StyledPreviewImageContainer>
                 <StyledBodyContent>
-                  <div className="font-face-ebgr">
-                    <StyledBodyTitle> {props.title} </StyledBodyTitle>                  
+                    <StyledBodyTitleContainer>
+                      {props.preview_link && <StyledBodyTitleLink target="_blank" href={props.preview_link} ref={LinkRef}> {props.title} </StyledBodyTitleLink>}
+                      {!props.preview_link && props.title}
+                    </StyledBodyTitleContainer>
+                    <StyledBodyTags> <StyledBodyYear>{props.year}</StyledBodyYear> <StyledBodyPosition>{props.position}</StyledBodyPosition></StyledBodyTags>                 
                     <StyledBodyDescription>{props.description}</StyledBodyDescription>
-                  </div>
                 </StyledBodyContent>
               </StyledBody>
           </StyledCard>
